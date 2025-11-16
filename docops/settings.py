@@ -25,8 +25,8 @@ dotenv.load_dotenv()
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 DEBUG = os.getenv('DEBUG') == 'True'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-print(f"{ALLOWED_HOSTS=}")
 print(f"{DEBUG=}")
 # Application definition
 
@@ -72,7 +72,7 @@ WSGI_APPLICATION = 'docops.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-if os.getenv('IS_LOCAl') == 'True':
+if os.getenv('IS_LOCAl', False) == 'True':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
