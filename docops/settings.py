@@ -32,6 +32,7 @@ print(f"{SECRET_KEY=}")
 # Application definition
 
 INSTALLED_APPS = [
+    'patients',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

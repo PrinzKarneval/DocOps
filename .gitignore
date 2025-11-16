@@ -1,5 +1,7 @@
-/docops/.env
 /.idea/
-.*pyc
-db.sqlite3
+/docops/.env
+
 */__pycache__/
+.*pyc
+
+db.sqlite3
