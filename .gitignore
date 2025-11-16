@@ -2,6 +2,6 @@
 /docops/.env
 
 */__pycache__/
-.*pyc
+*.pyc
 
 db.sqlite3

@@ -9,10 +9,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import dj_database_url
+import dotenv
 import os
+
 from pathlib import Path
 
-import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +25,9 @@ dotenv.load_dotenv()
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 DEBUG = os.getenv('DEBUG') == 'True'
-SECRET_KEY = os.getenv('SECRET_KEY')
 
 print(f"{ALLOWED_HOSTS=}")
 print(f"{DEBUG=}")
-print(f"{SECRET_KEY=}")
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -73,13 +72,29 @@ WSGI_APPLICATION = 'docops.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.getenv('IS_LOCAl') == 'True':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': os.getenv("DB_HOST", "localhost"),
+            'PORT': os.getenv("DB_PORT", "5432"),
+            'OPTIONS': {
+                'connect_timeout': int(os.getenv("DB_TIMEOUT", "10")),
+                'sslmode': os.getenv("DB_SSLMODE", "prefer"),
+            }
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
 
 
 # Password validation
